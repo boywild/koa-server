@@ -6,7 +6,7 @@
   "configurations": [
     {
       "name": "koa dev server",
-      "program": "${workspaceFolder}/app.js",
+      "program": "${workspaceFolder}/src/app.js",
       "request": "launch",
       "skipFiles": ["<node_internals>/**"],
       "type": "node"

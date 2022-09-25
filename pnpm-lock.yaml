@@ -1,11 +1,11 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@koa/router': ^12.0.0
   bcryptjs: ^2.4.3
   jsonwebtoken: ^8.5.1
   koa: ^2.13.4
   koa-bodyparser: ^4.3.0
-  koa-router: ^12.0.0
   koa-static: ^5.0.0
   lodash: ^4.17.21
   mysql2: ^2.3.3
@@ -14,11 +14,11 @@ specifiers:
   validator: ^13.7.0
 
 dependencies:
+  '@koa/router': 12.0.0
   bcryptjs: 2.4.3
   jsonwebtoken: 8.5.1
   koa: 2.13.4
   koa-bodyparser: 4.3.0
-  koa-router: 12.0.0
   koa-static: 5.0.0
   lodash: 4.17.21
   mysql2: 2.3.3
@@ -27,6 +27,16 @@ dependencies:
   validator: 13.7.0
 
 packages:
+
+  /@koa/router/12.0.0:
+    resolution: {integrity: sha512-cnnxeKHXlt7XARJptflGURdJaO+ITpNkOHmQu7NHmCoRinPbyvFzce/EG/E8Zy81yQ1W9MoSdtklc3nyaDReUw==}
+    engines: {node: '>= 12'}
+    dependencies:
+      http-errors: 2.0.0
+      koa-compose: 4.1.0
+      methods: 1.1.2
+      path-to-regexp: 6.2.1
+    dev: false
 
   /@types/debug/4.1.7:
     resolution: {integrity: sha512-9AonUzyTjXXhEOa0DnqpzZi6VHlqKMswga9EXjpXnnqxwLtdvPPtlO8evrI5D9S6asFRCQ6v+wpiUKbw+vKqyg==}
@@ -375,16 +385,6 @@ packages:
     dependencies:
       co: 4.6.0
       koa-compose: 4.1.0
-    dev: false
-
-  /koa-router/12.0.0:
-    resolution: {integrity: sha512-zGrdiXygGYW8WvrzeGsHZvKnHs4DzyGoqJ9a8iHlRkiwuEAOAPyI27//OlhoWdgFAEIM3qbUgr0KCuRaP/TCag==}
-    engines: {node: '>= 12'}
-    dependencies:
-      http-errors: 2.0.0
-      koa-compose: 4.1.0
-      methods: 1.1.2
-      path-to-regexp: 6.2.1
     dev: false
 
   /koa-send/5.0.1:
