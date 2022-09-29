@@ -1,11 +1,13 @@
 const path = require('path')
 const Router = require('@koa/router')
 const requireDirectory = require('require-directory')
+const errors = require('../core/httpException')
 class InitManager {
   static initCore(app) {
     InitManager.app = app
     InitManager.loadConfig()
     InitManager.initLoadRouters()
+    InitManager.loadHttpException()
   }
 
   //   自动加载配置
@@ -26,6 +28,11 @@ class InitManager {
         }
       }
     })
+  }
+
+  // 自动加载全局错误
+  static loadHttpException() {
+    global.errs = errors
   }
 }
 
