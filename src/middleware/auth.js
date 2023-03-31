@@ -1,0 +1,1 @@
+function auth(ctx, next) {}
