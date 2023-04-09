@@ -7,15 +7,64 @@
 // 对每个字段种的多个规则进行逐个校验-判断是否为必填字段
 
 const validate = require('validator')
-const { isFunction } = require('lodash')
+const { isFunction, get, cloneDeep } = require('lodash')
+const { ParameterException } = require('./httpException')
+const { findMember } = require('../utils')
 
 class Validator {
+  constructor() {
+    this.data = {}
+    this.parsed = {}
+  }
   get(key) {}
-  validate(ctx) {
+  async validate(ctx, alias = {}) {
+    const source = this._getSource(ctx)
+    this.data = cloneDeep(source)
+    this.parsed = cloneDeep(source)
+    const memberKeys = findMember(this, {
+      filter: this._filter.bind(this)
+    })
+    const errorMsgs = []
+    for (let key of memberKeys) {
+      const result = await this._check(key, alias)
+      if (!result.pass) {
+        errorMsgs.push(result.message)
+      }
+    }
+    if (errorMsgs.length) {
+      throw new ParameterException(errorMsgs)
+    }
     return this
   }
 
-  // 从body/query/path/header种获取数据源
+  // 对字段进行规则校验
+  async _check(key, alias = {}) {
+    let result
+    const isFunc = isFunction(this[key])
+    if (isFunc) {
+      try {
+        await this[key](this.data)
+        result = new RuleResult(true)
+      } catch (e) {
+        result = new RuleResult(false, e.message || e.msg || '参数错误')
+      }
+    } else {
+      const rules = this[key]
+      const ruleField = new RuleField(rules)
+      key = alias[key] ? alias[key] : key
+      const { value } = this._findParams(key)
+      result = ruleField.validate(value)
+    }
+    if (!result.pass) {
+      return {
+        msg: `${isFunc ? '' : key}${result.message}`,
+        success: false
+      }
+    }
+    return { msg: 'ok', success: true }
+  }
+
+  // 从body/query/path/header获取数据源
   _getSource(ctx) {
     return {
       body: ctx.body,
@@ -23,6 +72,35 @@ class Validator {
       path: ctx.path,
       header: ctx.header
     }
+  }
+
+  // 过滤并获取特定前缀的方法
+  _filter(key) {
+    if (/^validate[A-Z]\w+/gi.test(key)) {
+      return true
+    }
+    if (this[key] instanceof Array) {
+      for (let ele of this[key]) {
+        if (!ele instanceof Rule) {
+          throw new Error('验证数组必须全部为Rule类型')
+        }
+      }
+      return true
+    }
+    return false
+  }
+
+  // 从ctx中获取字段值
+  _findParams(key) {
+    const from = ['body', 'query', 'path', 'header']
+    for (let ele of from) {
+      const val = get(this.data, [ele, key])
+      if (val) {
+        const path = [ele, key]
+        return { val, path }
+      }
+    }
+    return { val: null, path: [] }
   }
 }
 
@@ -76,7 +154,7 @@ class RuleField {
         if (!result.pass) {
           // 碰到校验不通过的情况立即返回失败
           filedResult.message = result.message
-          filedResult.legalValue = nullr
+          filedResult.legalValue = null
           return filedResult
         }
       }
