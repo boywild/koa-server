@@ -1,13 +1,5 @@
-// 校验规则生成器
-// 校验结果生成器
-//从ctx.query/body/path/header获取源数据
-// 提取特定的方法和字段
-// 根据需要校验的字段从源数据种匹配对应的值
-// 对所有字段挨个进行校验，存储所有错误校验信息
-// 对每个字段种的多个规则进行逐个校验-判断是否为必填字段
-
-const validate = require('validator')
-const { isFunction, get, cloneDeep } = require('lodash')
+const validator = require('validator')
+const { isFunction, get, cloneDeep, last, split, isNull } = require('lodash')
 const { ParameterException } = require('./httpException')
 const { findMember } = require('../utils')
 
@@ -16,7 +8,22 @@ class Validator {
     this.data = {}
     this.parsed = {}
   }
-  get(key) {}
+
+  // 获取器
+  get(path, parsed = true) {
+    if (parsed) {
+      const val = get(this.parsed, path, null)
+      if (isNull(val)) {
+        const key = last(split(path, '.'))
+        return get(this.parsed, ['default', key])
+      }
+      return val
+    } else {
+      return get(this.parsed, path)
+    }
+  }
+
+  // 校验器
   async validate(ctx, alias = {}) {
     const source = this._getSource(ctx)
     this.data = cloneDeep(source)
@@ -27,8 +34,8 @@ class Validator {
     const errorMsgs = []
     for (let key of memberKeys) {
       const result = await this._check(key, alias)
-      if (!result.pass) {
-        errorMsgs.push(result.message)
+      if (!result.success) {
+        errorMsgs.push(result.msg)
       }
     }
     if (errorMsgs.length) {
@@ -52,8 +59,21 @@ class Validator {
       const rules = this[key]
       const ruleField = new RuleField(rules)
       key = alias[key] ? alias[key] : key
-      const { value } = this._findParams(key)
+      const { value, path } = this._findParams(key)
       result = ruleField.validate(value)
+
+      // 如果参数路径不存在，往往是因为用户传了空值，而又设置了默认值
+      // 后端设置该key非必传，并设置了未传入该字段情况下的默认值
+      // 前端请求接口时没传入相应的字段
+      // 此时校验器会通过校验
+      if (result.pass) {
+        if (!path.length) {
+          set(this.parsed, ['default', key], result.legalValue)
+        }
+        // else {
+        //   set(this.parsed, path, result.legalValue)
+        // }
+      }
     }
     if (!result.pass) {
       return {
@@ -94,13 +114,13 @@ class Validator {
   _findParams(key) {
     const from = ['body', 'query', 'path', 'header']
     for (let ele of from) {
-      const val = get(this.data, [ele, key])
-      if (val) {
+      const value = get(this.data, [ele, key])
+      if (value) {
         const path = [ele, key]
-        return { val, path }
+        return { value, path }
       }
     }
-    return { val: null, path: [] }
+    return { value: null, path: [] }
   }
 }
 
@@ -113,7 +133,7 @@ class Rule {
   }
 
   validate(val) {
-    if (!validate[this.name](val, this.params)) {
+    if (!validator[this.name](val, this.params)) {
       // 校验不通过
       return new RuleResult(false, message || '参数错误')
     }
@@ -201,8 +221,14 @@ class RuleField {
 
 class RuleFieldResult extends RuleResult {
   constructor(pass, message, legalValue = null) {
+    super()
     this.pass = pass
     this.message = message
     this.legalValue = legalValue
   }
+}
+
+module.exports = {
+  Validator,
+  Rule
 }

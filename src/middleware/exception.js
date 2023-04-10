@@ -4,9 +4,10 @@ const exception = async (ctx, next) => {
   try {
     await next()
   } catch (e) {
-    console.log(e.message)
     const isHttpException = e instanceof HttpException
-
+    if (!isHttpException) {
+      throw e
+    }
     // 参数校验错误
     if (isHttpException) {
       const { message = '', code, errorCode } = e

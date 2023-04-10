@@ -7,7 +7,7 @@ const exception = require('./middleware/exception')
 
 const app = new Koa()
 app.use(serve(resolve(__dirname, './static')))
-app.use(bodyParser)
+app.use(bodyParser())
 app.use(exception)
 app.use(user.routes())
 
