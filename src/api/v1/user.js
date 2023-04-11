@@ -1,5 +1,5 @@
 const Router = require('@koa/router')
-const { PositiveIntegerValidator } = require('../../validate')
+const { PositiveIntegerValidator } = require('@/validate')
 
 const router = new Router()
 

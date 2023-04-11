@@ -6,6 +6,13 @@ module.exports = {
   },
   extends: ['airbnb-base', 'plugin:prettier/recommended'],
   overrides: [],
+  settings: {
+    'import/resolver': {
+      alias: {
+        map: [['@', './src/']]
+      }
+    }
+  },
   parserOptions: {
     ecmaVersion: 'latest'
   },

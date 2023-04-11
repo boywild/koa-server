@@ -1,4 +1,4 @@
-const { Validator, Rule } = require('../core/validator')
+const { Validator, Rule } = require('@/core/validator')
 
 class PositiveIntegerValidator extends Validator {
   constructor() {

@@ -9,6 +9,7 @@ specifiers:
   eslint: ^7.32.0 || ^8.2.0
   eslint-config-airbnb-base: ^15.0.0
   eslint-config-prettier: ^8.8.0
+  eslint-import-resolver-alias: ^1.1.2
   eslint-plugin-import: ^2.25.2
   eslint-plugin-prettier: ^4.2.1
   husky: ^8.0.3
@@ -32,6 +33,7 @@ dependencies:
   koa-bodyparser: 4.4.0
   koa-static: 5.0.0
   lodash: 4.17.21
+  module-alias: 2.2.2
   mysql2: 2.3.3
   require-directory: 2.1.1
   sequelize: 6.30.0_mysql2@2.3.3
@@ -44,10 +46,10 @@ devDependencies:
   eslint: 8.38.0
   eslint-config-airbnb-base: 15.0.0_148ea16a07153bd0fe3b9f83e594c2bb
   eslint-config-prettier: 8.8.0_eslint@8.38.0
+  eslint-import-resolver-alias: 1.1.2_eslint-plugin-import@2.27.5
   eslint-plugin-import: 2.27.5_eslint@8.38.0
   eslint-plugin-prettier: 4.2.1_6472200cd43a82c27b17d90e3a5649bd
   husky: 8.0.3
-  module-alias: 2.2.2
   prettier: 2.8.7
 
 packages:
@@ -993,6 +995,15 @@ packages:
       eslint: '>=7.0.0'
     dependencies:
       eslint: 8.38.0
+    dev: true
+
+  /eslint-import-resolver-alias/1.1.2_eslint-plugin-import@2.27.5:
+    resolution: {integrity: sha512-WdviM1Eu834zsfjHtcGHtGfcu+F30Od3V7I9Fi57uhBEwPkjDcii7/yW8jAT+gOhn4P/vOxxNAXbFAKsrrc15w==}
+    engines: {node: '>= 4'}
+    peerDependencies:
+      eslint-plugin-import: '>=1.4.0'
+    dependencies:
+      eslint-plugin-import: 2.27.5_eslint@8.38.0
     dev: true
 
   /eslint-import-resolver-node/0.3.7:
@@ -2064,7 +2075,7 @@ packages:
 
   /module-alias/2.2.2:
     resolution: {integrity: sha512-A/78XjoX2EmNvppVWEhM2oGk3x4lLxnkEA4jTbaK97QKSDjkIoOsKQlfylt/d3kKKi596Qy3NP5XrXJ6fZIC9Q==}
-    dev: true
+    dev: false
 
   /moment-timezone/0.5.42:
     resolution: {integrity: sha512-tjI9goqwzkflKSTxJo+jC/W8riTFwEjjunssmFvAWlvNVApjbkJM7UHggyKO0q1Fd/kZVKY77H7C9A0XKhhAFw==}

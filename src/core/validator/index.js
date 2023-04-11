@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-syntax */
 const { isFunction, get, set, cloneDeep, last, split, isNull } = require('lodash')
-const { ParameterException } = require('../httpException')
-const { findMember } = require('../../utils')
+const { findMember } = require('@/utils')
+const { ParameterException } = require('@/core/httpException')
 const Rule = require('./rule')
 const RuleField = require('./ruleField')
 const RuleResult = require('./ruleResult')
