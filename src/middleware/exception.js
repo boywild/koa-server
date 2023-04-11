@@ -8,9 +8,9 @@ const exception = async (ctx, next) => {
     if (!isHttpException) {
       throw e
     }
+    const { message = '', code, errorCode } = e
     // 参数校验错误
     if (isHttpException) {
-      const { message = '', code, errorCode } = e
       ctx.body = {
         message,
         errorCode,

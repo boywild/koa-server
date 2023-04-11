@@ -1,5 +1,5 @@
 function findMember(instance, { prefix, specifiedType, filter }) {
-  const _shouldKeep = (k) => {
+  const shouldKeep = (k) => {
     if (filter) {
       return filter(k)
     }
@@ -9,18 +9,22 @@ function findMember(instance, { prefix, specifiedType, filter }) {
     if (specifiedType && instance[k] instanceof specifiedType) {
       return true
     }
+    return false
   }
 
-  const _loop = (instance) => {
+  // eslint-disable-next-line no-shadow
+  const loop = (instance) => {
+    // eslint-disable-next-line no-proto
     if (instance.__proto__ === null) return []
     let keys = Reflect.ownKeys(instance)
     if (filter) {
-      keys = keys.filter((ele) => _shouldKeep(ele))
+      keys = keys.filter((ele) => shouldKeep(ele))
     }
-    return [...keys, ..._loop(instance.__proto__)]
+    // eslint-disable-next-line no-proto
+    return [...keys, ...loop(instance.__proto__)]
   }
 
-  return _loop(instance)
+  return loop(instance)
 }
 
 module.exports = { findMember }
