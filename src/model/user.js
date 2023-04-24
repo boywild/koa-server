@@ -1,6 +1,6 @@
-const { Sequelize, DataTypes, Model } = require('sequelize')
-
-const sequelize = new Sequelize('mysql://user:pass@example.com:5432/dbname')
+const { DataTypes, Model } = require('sequelize')
+const bcrypt = require('bcryptjs')
+const sequelize = require('./index')
 
 class User extends Model {}
 
@@ -10,7 +10,14 @@ User.init(
     open_id: { type: DataTypes.STRING(64), unique: true },
     nickname: { type: DataTypes.STRING },
     email: { type: DataTypes.STRING(128), unique: true },
-    password: { type: DataTypes.STRING }
+    password: {
+      type: DataTypes.STRING,
+      set(val) {
+        const salt = bcrypt.genSalt(10)
+        const pwd = bcrypt.hashSync(val, salt)
+        this.setDataValue(pwd)
+      }
+    }
   },
   {
     sequelize,
