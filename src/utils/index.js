@@ -30,6 +30,7 @@ function findMember(instance, { prefix, specifiedType, filter }) {
   return loop(instance)
 }
 
+// 生成token
 function generateToken(uid, scope) {
   const token = jwt.sign({ uid, scope }, security.key, { expiresIn: security.expire })
 
