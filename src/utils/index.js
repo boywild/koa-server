@@ -1,3 +1,6 @@
+const jwt = require('jsonwebtoken')
+const { security } = require('@/config')
+
 function findMember(instance, { prefix, specifiedType, filter }) {
   const shouldKeep = (k) => {
     if (filter) {
@@ -27,4 +30,10 @@ function findMember(instance, { prefix, specifiedType, filter }) {
   return loop(instance)
 }
 
-module.exports = { findMember }
+function generateToken(uid, scope) {
+  const token = jwt.sign({ uid, scope }, security.key, { expiresIn: security.expire })
+
+  return token
+}
+
+module.exports = { findMember, generateToken }
