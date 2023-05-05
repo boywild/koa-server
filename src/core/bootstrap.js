@@ -11,6 +11,7 @@ function loadConfig() {
 function loadRouter(app) {
   const visitor = (obj) => {
     app.use(obj.routes())
+    app.use(obj.allowedMethods())
   }
   requireDirectory(module, `${process.cwd()}/src/api/v1`, { visit: visitor })
 }

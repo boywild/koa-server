@@ -91,10 +91,10 @@ class Validator {
   // 从body/query/path/header获取数据源
   static getSource(ctx) {
     return {
-      body: ctx.body,
-      query: ctx.query,
-      path: ctx.path,
-      header: ctx.header
+      body: ctx.request.body,
+      query: ctx.request.query,
+      path: ctx.request.path,
+      header: ctx.request.header
     }
   }
 
