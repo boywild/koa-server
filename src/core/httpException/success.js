@@ -1,7 +1,7 @@
 const HttpException = require('./httpException')
 
 class Success extends HttpException {
-  constructor(message = 'ok', errorCode = 10000) {
+  constructor(message = 'ok', errorCode = 0) {
     super()
     this.message = message
     this.errorCode = errorCode

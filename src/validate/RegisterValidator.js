@@ -1,4 +1,5 @@
 const { Validator, Rule } = require('@/core/validator')
+const User = require('@/model/user')
 
 class RegisterValidator extends Validator {
   constructor() {
@@ -14,10 +15,23 @@ class RegisterValidator extends Validator {
   }
 
   // 校验两次输入密码是否相等
-  // validatePassword() {}
+  // eslint-disable-next-line class-methods-use-this
+  validatePassword(val) {
+    const { password1, password2 } = val.body
+    if (password1 !== password2) {
+      throw new Error('两个密码必须相同')
+    }
+  }
 
   // 校验邮箱是否已经注册
-  // validateEmail() {}
+  // eslint-disable-next-line class-methods-use-this
+  async validateEmail(val) {
+    const { email } = val.body
+    const user = await User.findOne({ email })
+    if (user) {
+      throw new Error('该邮箱已注册')
+    }
+  }
 }
 
 module.exports = RegisterValidator

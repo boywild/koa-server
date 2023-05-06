@@ -7,12 +7,9 @@ const User = require('@/model/user')
 const router = new Router({ prefix: '/v1/user' })
 
 router.post('/registry', async (ctx) => {
-  // ctx.router available
-  console.log(ctx.request)
   const v = await new RegisterValidator().validate(ctx)
-  const user = { nickname: v.get('body.nickname'), email: v.get('body.email') }
+  const user = { nickname: v.get('body.nickname'), email: v.get('body.email'), password: v.get('body.password2'), open_id: '2323' }
   // const token = generateToken(1, 2)
-  // ctx.body = { nickname: v.get('body.nickname'), email: v.get('body.email'), token }
   await User.create(user)
   throw new Success()
 })
