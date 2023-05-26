@@ -2,7 +2,19 @@ const { DataTypes, Model } = require('sequelize')
 const bcrypt = require('bcryptjs')
 const sequelize = require('./index')
 
-class User extends Model {}
+class User extends Model {
+  static async verifyEmailPassword(email, password) {
+    const user = await this.findOne({ where: { email } })
+    if (!user) {
+      throw new global.err.AuthFailed('账号不存在')
+    }
+    const correct = await bcrypt.compare(password, user.password)
+    if (!correct) {
+      throw new global.err.AuthFailed('密码错误')
+    }
+    return user
+  }
+}
 
 User.init(
   {

@@ -1,13 +1,12 @@
 const Router = require('@koa/router')
 const { generateToken } = require('@/utils/index')
 const TokenValidator = require('@/validate/TokenValidator')
-const LOGIN_TYPE = require('@/config/enum')
-// const User = require('@/model/user')
+const { LOGIN_TYPE, AUTY_TYPE } = require('@/config/enum')
+const User = require('@/model/user')
 
-function emailLogin() {
-  // 校验email是否有效
-  // 校验密码是否输入错误
-  return generateToken(1, 2)
+async function emailLogin(email, password) {
+  const user = await User.verifyEmailPassword(email, password)
+  return generateToken(user.id, AUTY_TYPE.USER)
 }
 function miniProgramLogin() {}
 
@@ -18,13 +17,13 @@ router.post('/', async (ctx) => {
   const type = v.get('body.type')
   let token = ''
   switch (type) {
-    case type === LOGIN_TYPE.USER_EMAIL:
-      token = await emailLogin()
+    case LOGIN_TYPE.USER_EMAIL:
+      token = await emailLogin(v.get('body.email'), v.get('body.password'))
       break
-    case type === LOGIN_TYPE.USER_MINI_PROGRAM:
+    case LOGIN_TYPE.USER_MINI_PROGRAM:
       token = await miniProgramLogin()
       break
-    case type === LOGIN_TYPE.ADMIN_EMAIL:
+    case LOGIN_TYPE.ADMIN_EMAIL:
       break
     default:
       throw new Error('2323')
