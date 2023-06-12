@@ -3,12 +3,19 @@ const { generateToken } = require('@/utils/index')
 const TokenValidator = require('@/validate/TokenValidator')
 const { LOGIN_TYPE, AUTY_TYPE } = require('@/config/enum')
 const User = require('@/model/user')
+const Wx = require('@/core/wx')
 
+// 邮箱登录
 async function emailLogin(email, password) {
   const user = await User.verifyEmailPassword(email, password)
   return generateToken(user.id, AUTY_TYPE.USER)
 }
-function miniProgramLogin() {}
+
+// 小程序登录
+async function miniProgramLogin(code) {
+  const token = await Wx.codeToToken(code)
+  return token
+}
 
 const router = new Router({ prefix: '/v1/token' })
 
@@ -18,10 +25,10 @@ router.post('/', async (ctx) => {
   let token = ''
   switch (type) {
     case LOGIN_TYPE.USER_EMAIL:
-      token = await emailLogin(v.get('body.email'), v.get('body.password'))
+      token = await emailLogin(v.get('body.account'), v.get('body.password'))
       break
     case LOGIN_TYPE.USER_MINI_PROGRAM:
-      token = await miniProgramLogin()
+      token = await miniProgramLogin(v.get('body.account'))
       break
     case LOGIN_TYPE.ADMIN_EMAIL:
       break

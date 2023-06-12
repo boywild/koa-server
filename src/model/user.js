@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs')
 const sequelize = require('./index')
 
 class User extends Model {
+  // 校验邮箱
   static async verifyEmailPassword(email, password) {
     const user = await this.findOne({ where: { email } })
     if (!user) {
@@ -12,6 +13,16 @@ class User extends Model {
     if (!correct) {
       throw new global.err.AuthFailed('密码错误')
     }
+    return user
+  }
+
+  static async getUserByOpenid(openid) {
+    const user = await this.findOne({ where: { open_id: openid } })
+    return user
+  }
+
+  static async registerByOpenid(openid) {
+    const user = await this.create({ open_id: openid })
     return user
   }
 }
