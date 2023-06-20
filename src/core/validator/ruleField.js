@@ -35,7 +35,7 @@ class RuleField {
   // 根据校验类型进行值转换
   convert(val) {
     for (const rule of this.rules) {
-      if (rule.name === 'isInit') {
+      if (rule.name === 'isInt') {
         return parseInt(val, 10)
       }
       if (rule.name === 'isFloat') {

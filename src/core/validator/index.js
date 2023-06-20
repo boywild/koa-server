@@ -73,10 +73,10 @@ class Validator {
       if (result.pass) {
         if (!path.length) {
           set(this.parsed, ['default', k], result.legalValue)
+        } else {
+          // TODO  需要理解
+          set(this.parsed, path, result.legalValue)
         }
-        // else {
-        //   set(this.parsed, path, result.legalValue)
-        // }
       }
     }
     if (!result.pass) {
@@ -93,7 +93,7 @@ class Validator {
     return {
       body: ctx.request.body,
       query: ctx.request.query,
-      path: ctx.request.path,
+      path: ctx.params,
       header: ctx.request.header
     }
   }
