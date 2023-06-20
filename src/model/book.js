@@ -13,7 +13,7 @@ Book.init(
     pub_date: DataTypes.DATEONLY,
     fav_nums: { type: DataTypes.INTEGER, defaultValue: 0 }
   },
-  { sequelize, tableName: 'book' }
+  { sequelize, tableName: 'book', createdAt: 'created_at', updatedAt: 'updated_at', deletedAt: 'deleted_at' }
 )
 
 module.exports = Book

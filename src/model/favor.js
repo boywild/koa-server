@@ -8,7 +8,7 @@ Favor.init(
     art_id: DataTypes.INTEGER,
     type: DataTypes.INTEGER
   },
-  { sequelize, tableName: 'favor' }
+  { sequelize, tableName: 'favor', createdAt: 'created_at', updatedAt: 'updated_at', deletedAt: 'deleted_at' }
 )
 
 module.exports = Favor

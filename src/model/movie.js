@@ -5,14 +5,14 @@ class Movie extends Model {}
 
 Movie.init(
   {
-    title: DataTypes.STRING,
-    content: DataTypes.STRING,
-    image: DataTypes.STRING,
-    fav_nums: { type: DataTypes.INET, defaultValue: 0 },
-    pub_date: DataTypes.DATEONLY,
-    type: DataTypes.INTEGER
+    title: { type: DataTypes.STRING },
+    content: { type: DataTypes.STRING },
+    image: { type: DataTypes.STRING },
+    fav_nums: { type: DataTypes.INTEGER, defaultValue: 0 },
+    pub_date: { type: DataTypes.DATEONLY },
+    type: { type: DataTypes.INTEGER }
   },
-  { sequelize, tableName: 'movie' }
+  { sequelize, tableName: 'movie', createdAt: 'created_at', updatedAt: 'updated_at', deletedAt: 'deleted_at' }
 )
 
 module.exports = Movie

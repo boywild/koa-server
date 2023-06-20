@@ -18,7 +18,7 @@ const sequelize = new Sequelize('7yue', 'root', '', {
 // }
 // testConnect()
 ;(async () => {
-  await sequelize.sync({ force: true })
+  await sequelize.sync()
 })()
 
 module.exports = sequelize
