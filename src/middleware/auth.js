@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken')
 const config = require('@/config')
 
 class Auth {
-  constructor(level) {
+  constructor(level = 1) {
     this.level = level
   }
 
@@ -34,10 +34,10 @@ class Auth {
 
       ctx.auth = {
         scope: decode.scope,
-        token: decode.token
+        uid: decode.uid
       }
 
-      next()
+      await next()
     }
   }
 
