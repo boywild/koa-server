@@ -4,12 +4,29 @@
   // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
+    
     {
-      "name": "koa dev server",
+      "name": "debug run npm",
+      "request": "launch",
+      "runtimeArgs": [
+        "run-script",
+        "dev"
+      ],
+      "runtimeExecutable": "npm",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "console": "integratedTerminal",
+      "type": "node"
+    },
+    
+    {
+      "name": "debug file app.js",
       "program": "${workspaceFolder}/src/app.js",
       "request": "launch",
       "skipFiles": ["<node_internals>/**"],
-      "type": "node"
+      "type": "node",
+      "console": "integratedTerminal"
     }
   ]
 }
