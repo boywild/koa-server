@@ -16,7 +16,6 @@
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "console": "integratedTerminal",
       "type": "node"
     },
     
@@ -25,8 +24,7 @@
       "program": "${workspaceFolder}/src/app.js",
       "request": "launch",
       "skipFiles": ["<node_internals>/**"],
-      "type": "node",
-      "console": "integratedTerminal"
+      "type": "node"
     }
   ]
 }

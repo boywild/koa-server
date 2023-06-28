@@ -11,7 +11,15 @@ const AUTY_TYPE = {
   SUPER_ADMIN: 32
 }
 
+const ART_TYPE = {
+  MOVIE: 100,
+  MUSIC: 200,
+  SENTENCE: 300,
+  BOOK: 400
+}
+
 module.exports = {
   LOGIN_TYPE,
-  AUTY_TYPE
+  AUTY_TYPE,
+  ART_TYPE
 }
