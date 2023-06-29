@@ -1,11 +1,27 @@
 const { DataTypes, Model } = require('sequelize')
 const sequelize = require('./index')
+const Art = require('./art')
 
 class Favor extends Model {
   static async userLikeIt(uId, artId, type) {
     const favor = await this.findOne({ where: { user_id: uId, art_id: artId, type } })
     return !!favor
   }
+
+  static async like(artId, type, uid) {
+    const params = { user_id: uid, art_id: artId, type }
+    const favor = await this.findOne({ where: { ...params } })
+    if (favor) {
+      throw new global.err.LikeError()
+    }
+    return sequelize.transaction(async (t) => {
+      this.create({ ...params }, { transaction: t })
+      const art = await Art.getData(artId, type)
+      await art.increment('fav_nums', { by: 1, transaction: t })
+    })
+  }
+
+  // static async dislike(artId, type, uid) {}
 }
 
 Favor.init(
