@@ -24,7 +24,7 @@ router.get('/latest', new Auth().m(), async (ctx) => {
 })
 
 // 下一期
-router.get('/:index/next', new Auth().m(), async (ctx) => {
+router.get('/:index/next', async (ctx) => {
   const v = await new PositiveIntegerValidator().validate(ctx, { id: 'index' })
   const index = v.get('path.index')
   const flow = await Flow.findOne({ where: { index: index + 1 } })
@@ -81,7 +81,7 @@ router.get('/:type/:id', async (ctx) => {
 // 期刊点赞数
 router.get('/:type/:id/favor', () => {})
 
-// 我的点赞
+// 我点赞的期刊
 router.get('/fav', () => {})
 
 module.exports = router

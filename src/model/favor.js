@@ -3,11 +3,13 @@ const sequelize = require('./index')
 const Art = require('./art')
 
 class Favor extends Model {
+  // 判断是否点赞
   static async userLikeIt(uId, artId, type) {
     const favor = await this.findOne({ where: { user_id: uId, art_id: artId, type } })
     return !!favor
   }
 
+  // 点赞
   static async like(artId, type, uid) {
     const params = { user_id: uid, art_id: artId, type }
     const favor = await this.findOne({ where: { ...params } })
@@ -21,7 +23,18 @@ class Favor extends Model {
     })
   }
 
-  // static async dislike(artId, type, uid) {}
+  // 取消点赞
+  static async dislike(artId, type, uid) {
+    const favor = await this.findOne({ where: { art_id: artId, type, user_id: uid } })
+    if (!favor) {
+      throw new global.err.DislikeError()
+    }
+    return sequelize.transaction(async (t) => {
+      await favor.destroy({ force: false, transaction: t })
+      const art = await Art.getData(artId, type)
+      await art.decrement('fav_nums', { by: 1, transaction: t })
+    })
+  }
 }
 
 Favor.init(
